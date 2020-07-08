@@ -1,0 +1,4 @@
+<launch>
+    <node name="arrowkeys_teleop_node" pkg="arrowkeys_teleop" type="arrowkeys_teleop_node"/>
+    <node pkg="rqt_image_view" type="rqt_image_view" name="image_view" args="/raspicam_node/image/compressed"/>
+</launch>
