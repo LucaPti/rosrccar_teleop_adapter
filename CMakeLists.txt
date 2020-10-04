@@ -209,4 +209,6 @@ include_directories(
 
 
 add_executable(twist2rc src/twist2rc.cpp)
+add_executable(twist2vcmd src/twist2vcmd.cpp)
 target_link_libraries(twist2rc ${catkin_LIBRARIES})
+target_link_libraries(twist2vcmd ${catkin_LIBRARIES})
