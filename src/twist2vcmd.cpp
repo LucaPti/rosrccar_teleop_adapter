@@ -5,6 +5,7 @@
 float acceleration;
 float steering;
 ros::Publisher pub_;
+int idletime;
 
 void convertercallback(const geometry_msgs::Twist& tw_msg)
 {
@@ -13,8 +14,20 @@ void convertercallback(const geometry_msgs::Twist& tw_msg)
   steering = (float)tw_msg.angular.z;  // between -1 and 1
   vcmd_msg.target_lon = acceleration*1e3; // usually 0.8
   vcmd_msg.target_lat = -steering*1e3;  // between -1 and 1
-  vcmd_msg.operationmode_lon = 4; //"automated" mode
-  vcmd_msg.operationmode_lat = 4; //"automated" mode
+  if((acceleration==0)&&(steering==0)){
+    idletime = idletime +1;
+  }
+  else {
+    idletime = 0;
+  }
+  if(idletime<100){
+    vcmd_msg.operationmode_lon = 4; //"automated" mode
+    vcmd_msg.operationmode_lat = 4; //"automated" mode
+  }
+  else {
+    vcmd_msg.operationmode_lon = 1; //"manual" mode
+    vcmd_msg.operationmode_lat = 1; //"manual" mode
+  }
   pub_.publish(vcmd_msg);
 }
 
@@ -26,6 +39,7 @@ int main(int argc, char **argv)
   ros::Subscriber sub_ = n_.subscribe("cmd_vel", 1, convertercallback);
   pub_ = n_.advertise<rosrccar_messages::VehicleCommand>("vehicle_command", 1);
   ROS_INFO("Subscribed to cmd_vel and publishing to vehicle_command");
+  idletime = 0;
   ros::spin();
   return 0;
 }
