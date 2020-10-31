@@ -13,7 +13,7 @@ void convertercallback(const geometry_msgs::Twist& tw_msg)
   acceleration = (float)tw_msg.linear.x; // usually 0.8
   steering = (float)tw_msg.angular.z;  // between -1 and 1
   vcmd_msg.target_lon = acceleration*1e3; // usually 0.8
-  vcmd_msg.target_lat = -steering*1e3;  // between -1 and 1
+  vcmd_msg.target_lat = steering*1e3;  // between -1 and 1
   if((acceleration==0)&&(steering==0)){
     idletime = idletime +1;
   }
